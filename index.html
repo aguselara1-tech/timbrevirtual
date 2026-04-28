@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Timbre Digital</title>
+<title>Timbre Digital - Blanco Encalada 4480</title>
 
 <style>
 :root{
@@ -28,18 +28,18 @@ body{
     var(--bg);
   color:var(--text);
 }
-.app{max-width:850px;margin:auto}
+.app{max-width:900px;margin:auto}
 .hero{text-align:center;padding:24px 8px}
 h1{
-  font-size:clamp(34px,8vw,56px);
-  line-height:.95;
+  font-size:clamp(32px,7.5vw,54px);
+  line-height:.98;
   margin:0;
   letter-spacing:-.05em;
 }
 .subtitle{
   color:var(--muted);
   line-height:1.45;
-  max-width:680px;
+  max-width:720px;
   margin:14px auto;
 }
 .card,.unit{
@@ -81,11 +81,13 @@ button,.btn{
   color:inherit;
 }
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px}
 .blue{background:var(--blue);color:#082f49}
 .green{background:var(--green);color:#052e16}
 .wa{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);color:#bbf7d0}
 .admin{background:rgba(251,191,36,.14);border:1px solid rgba(251,191,36,.28);color:#fde68a}
 .gray{background:rgba(148,163,184,.14);border:1px solid rgba(148,163,184,.22);color:#e2e8f0}
+.red{background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.28);color:#fecaca}
 .disabled{background:rgba(148,163,184,.1);color:rgba(226,232,240,.45);pointer-events:none}
 .msg{
   border-radius:14px;
@@ -107,7 +109,7 @@ button,.btn{
 }
 .units{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(245px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(265px,1fr));
   gap:12px;
 }
 .unit{margin:0}
@@ -126,17 +128,48 @@ button,.btn{
   gap:12px;
   margin-bottom:12px;
 }
+.contact-card{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(15,23,42,.55);
+  border-radius:17px;
+  padding:12px;
+  margin-top:10px;
+}
+.contact-name{
+  font-size:17px;
+  font-weight:950;
+  letter-spacing:-.02em;
+}
+.contact-phone{
+  color:#cbd5e1;
+  font-size:14px;
+  margin:4px 0 10px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+}
 .edit{margin-top:10px}
+.contact-row{
+  border:1px dashed rgba(255,255,255,.18);
+  border-radius:16px;
+  padding:12px;
+  margin-top:12px;
+  background:rgba(15,23,42,.45);
+}
+.row-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
 .footer{
   text-align:center;
   color:rgba(226,232,240,.45);
   font-size:12px;
   margin:18px;
 }
-@media(max-width:620px){
+@media(max-width:720px){
   body{padding:14px}
-  .grid2{grid-template-columns:1fr}
-  .top{flex-direction:column}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .top,.row-head{flex-direction:column;align-items:stretch}
 }
 </style>
 </head>
@@ -145,8 +178,8 @@ button,.btn{
 <main class="app">
   <section class="hero">
     <div class="pill" style="display:inline-block;margin-bottom:12px">📱 Timbre digital por QR</div>
-    <h1 id="building-title">Edificio San Martín</h1>
-    <p class="subtitle">Visitantes: buscá el departamento y tocá llamar o WhatsApp. Residentes: entren con clave para cargar o actualizar sus datos.</p>
+    <h1 id="building-title">Edificio Blanco Encalada 4480</h1>
+    <p class="subtitle">Visitantes: buscá el departamento y tocá llamar o WhatsApp. Residentes: entren con clave para cargar o actualizar sus contactos.</p>
   </section>
 
   <div id="firebase-warning" class="card msg warn hidden">Conectando con la base online...</div>
@@ -170,7 +203,7 @@ button,.btn{
     <div class="top">
       <div>
         <h3 style="margin:0">Edición habilitada</h3>
-        <div class="small">Tocá tu departamento y completá hasta dos nombres, teléfono y WhatsApp.</div>
+        <div class="small">Tocá tu departamento. Podés agregar todos los contactos que quieras con el botón +.</div>
       </div>
       <span class="pill">Residente</span>
     </div>
@@ -180,7 +213,7 @@ button,.btn{
   </section>
 
   <section class="card">
-    <label for="search">Buscar departamento</label>
+    <label for="search">Buscar departamento o contacto</label>
     <input id="search" type="search" placeholder="Ejemplo: 2A, piso 3, Gómez, 5..." />
   </section>
 
@@ -205,20 +238,20 @@ const firebaseConfig = {
 };
 
 const CONFIG = {
-  buildingName: "Edificio San Martín",
+  buildingName: "Edificio Blanco Encalada 4480",
   residentAccessCode: "BE4480",
   databasePath: "edificio_BE4480/unidades",
   units: [
-    { id:"pb", floor:"PB", depto:"PB", tenant1:"", tenant2:"", phone:"", whatsapp:"" },
-    { id:"1-a", floor:"1", depto:"1A", tenant1:"", tenant2:"", phone:"", whatsapp:"" },
-    { id:"1-b", floor:"1", depto:"1B", tenant1:"", tenant2:"", phone:"", whatsapp:"" },
-    { id:"2-a", floor:"2", depto:"2A", tenant1:"", tenant2:"", phone:"", whatsapp:"" },
-    { id:"2-b", floor:"2", depto:"2B", tenant1:"", tenant2:"", phone:"", whatsapp:"" },
-    { id:"3-a", floor:"3", depto:"3A", tenant1:"", tenant2:"", phone:"", whatsapp:"" },
-    { id:"3-b", floor:"3", depto:"3B", tenant1:"", tenant2:"", phone:"", whatsapp:"" },
-    { id:"4-a", floor:"4", depto:"4A", tenant1:"", tenant2:"", phone:"", whatsapp:"" },
-    { id:"4-b", floor:"4", depto:"4B", tenant1:"", tenant2:"", phone:"", whatsapp:"" },
-    { id:"5", floor:"5", depto:"5", tenant1:"", tenant2:"", phone:"", whatsapp:"" }
+    { id:"pb", floor:"PB", depto:"PB", contacts:[] },
+    { id:"1-a", floor:"1", depto:"1A", contacts:[] },
+    { id:"1-b", floor:"1", depto:"1B", contacts:[] },
+    { id:"2-a", floor:"2", depto:"2A", contacts:[] },
+    { id:"2-b", floor:"2", depto:"2B", contacts:[] },
+    { id:"3-a", floor:"3", depto:"3A", contacts:[] },
+    { id:"3-b", floor:"3", depto:"3B", contacts:[] },
+    { id:"4-a", floor:"4", depto:"4A", contacts:[] },
+    { id:"4-b", floor:"4", depto:"4B", contacts:[] },
+    { id:"5", floor:"5", depto:"5", contacts:[] }
   ]
 };
 
@@ -230,6 +263,15 @@ let isAdminMode = localStorage.getItem("building_admin_mode") === "true";
 function $(id){ return document.getElementById(id); }
 
 $("building-title").textContent = CONFIG.buildingName;
+
+function escapeHtml(value){
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
 
 function cleanPhone(x){
   return String(x || "").split("").filter(function(c){
@@ -249,21 +291,55 @@ function norm(x){
     .replaceAll("ñ","n");
 }
 
-function tenants(u){
-  const arr = [u.tenant1, u.tenant2]
-    .map(function(x){ return String(x || "").trim(); })
-    .filter(Boolean);
-  return arr.length ? arr.join(" / ") : "Departamento";
+function normalizeContacts(u){
+  if(Array.isArray(u.contacts)){
+    return u.contacts
+      .map(function(c){
+        return {
+          name: String(c.name || "").trim(),
+          phone: cleanPhone(c.phone || ""),
+          whatsapp: cleanPhone(c.whatsapp || c.phone || "")
+        };
+      })
+      .filter(function(c){
+        return c.name || c.phone || c.whatsapp;
+      });
+  }
+
+  const fallback = [];
+  if(u.tenant1 || u.phone || u.whatsapp){
+    fallback.push({
+      name: String(u.tenant1 || "Contacto 1").trim(),
+      phone: cleanPhone(u.phone || ""),
+      whatsapp: cleanPhone(u.whatsapp || u.phone || "")
+    });
+  }
+  if(u.tenant2){
+    fallback.push({
+      name: String(u.tenant2).trim(),
+      phone: "",
+      whatsapp: ""
+    });
+  }
+  return fallback;
 }
 
-function maskPhone(p){
-  p = cleanPhone(p);
-  return p ? p.slice(0,4) + "••••" + p.slice(-4) : "Sin teléfono cargado";
+function contactSummary(u){
+  const contacts = normalizeContacts(u);
+  if(!contacts.length) return "Sin contactos cargados";
+  return contacts.map(function(c, index){
+    return c.name || ("Contacto " + (index + 1));
+  }).join(" / ");
 }
 
-function waLink(phone, depto){
+function hasAnyContact(u){
+  return normalizeContacts(u).some(function(c){ return c.phone || c.whatsapp; });
+}
+
+function waLink(phone, depto, name){
   const n = cleanPhone(phone).replaceAll("+","");
-  return "https://wa.me/" + n + "?text=" + encodeURIComponent("Hola, estoy en la entrada del edificio. Estoy llamando al depto " + depto + ".");
+  const label = name ? " para " + name : "";
+  return "https://wa.me/" + n + "?text=" + encodeURIComponent("Hola, estoy en la entrada del edificio. Estoy llamando al depto " + depto + label + ".");
 }
 
 function groupByFloor(list){
@@ -277,54 +353,90 @@ function groupByFloor(list){
 function merge(dbUnits){
   const byId = dbUnits || {};
   units = CONFIG.units.map(function(u){
-    return Object.assign({}, u, byId[u.id] || {});
+    const merged = Object.assign({}, u, byId[u.id] || {});
+    merged.contacts = normalizeContacts(merged);
+    return merged;
   });
   renderDirectory();
 }
 
+function renderContactCard(c, index, depto){
+  const name = c.name || ("Contacto " + (index + 1));
+  const phone = cleanPhone(c.phone);
+  const wa = cleanPhone(c.whatsapp || c.phone);
+
+  return `
+    <div class="contact-card">
+      <div class="contact-name">${escapeHtml(name)}</div>
+      <div class="contact-phone">${phone ? escapeHtml(phone) : "Sin teléfono cargado"}</div>
+      <div class="grid2">
+        ${phone ? `<a class="btn green" href="tel:${escapeHtml(phone)}">📞 Llamar</a>` : `<span class="btn disabled">📞 Sin teléfono</span>`}
+        ${wa ? `<a class="btn wa" href="${escapeHtml(waLink(wa, depto, name))}" target="_blank" rel="noopener">💬 WhatsApp</a>` : `<span class="btn disabled">💬 Sin WhatsApp</span>`}
+      </div>
+    </div>
+  `;
+}
+
+function renderContactRow(c, index){
+  return `
+    <div class="contact-row" data-contact-row>
+      <div class="row-head">
+        <strong>Contacto ${index + 1}</strong>
+        <button class="red remove-contact-btn" type="button">Eliminar contacto</button>
+      </div>
+
+      <div class="grid3">
+        <div>
+          <label>Nombre</label>
+          <input data-contact-name placeholder="Ejemplo: Ana Gómez" value="${escapeHtml(c.name || "")}" />
+        </div>
+        <div>
+          <label>Teléfono</label>
+          <input data-contact-phone type="tel" placeholder="+54911XXXXXXXX" value="${escapeHtml(c.phone || "")}" />
+        </div>
+        <div>
+          <label>WhatsApp</label>
+          <input data-contact-whatsapp type="tel" placeholder="+54911XXXXXXXX" value="${escapeHtml(c.whatsapp || "")}" />
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function renderUnit(u){
-  const phone = cleanPhone(u.phone);
-  const wa = cleanPhone(u.whatsapp || u.phone);
+  const contacts = normalizeContacts(u);
+  const contactCards = contacts.length
+    ? contacts.map(function(c, index){ return renderContactCard(c, index, u.depto); }).join("")
+    : `<div class="contact-card"><div class="resident">Aún sin contactos cargados</div></div>`;
 
   return `
     <article class="unit">
       <div class="top">
         <div>
-          <div class="unit-name">${u.depto}</div>
-          <div class="resident">${tenants(u)}</div>
-          <div class="small">${isAdminMode ? maskPhone(phone) : (phone ? "Contacto disponible" : "Aún sin datos cargados")}</div>
+          <div class="unit-name">${escapeHtml(u.depto)}</div>
+          <div class="resident">${escapeHtml(contactSummary(u))}</div>
+          <div class="small">${hasAnyContact(u) ? "Contacto disponible" : "Aún sin datos cargados"}</div>
         </div>
-        <span class="pill">Piso ${u.floor}</span>
+        <span class="pill">Piso ${escapeHtml(u.floor)}</span>
       </div>
 
-      <div class="grid2">
-        ${phone ? `<a class="btn green" href="tel:${phone}">📞 Llamar</a>` : `<span class="btn disabled">📞 Sin teléfono</span>`}
-        ${wa ? `<a class="btn wa" href="${waLink(wa,u.depto)}" target="_blank" rel="noopener">💬 WhatsApp</a>` : `<span class="btn disabled">💬 Sin WhatsApp</span>`}
-      </div>
+      ${contactCards}
 
       ${isAdminMode ? `
         <div class="edit">
-          <button class="admin edit-btn" type="button" data-id="${u.id}">✏️ Editar datos de ${u.depto}</button>
-          <div id="editor-${u.id}" class="hidden">
-            <label>Inquilino/a 1 opcional</label>
-            <input id="tenant1-${u.id}" placeholder="Ejemplo: Ana Gómez" />
+          <button class="admin edit-btn" type="button" data-id="${escapeHtml(u.id)}">✏️ Editar contactos de ${escapeHtml(u.depto)}</button>
 
-            <label>Inquilino/a 2 opcional</label>
-            <input id="tenant2-${u.id}" placeholder="Ejemplo: Juan Pérez" />
-
-            <div class="grid2">
-              <div>
-                <label>Teléfono</label>
-                <input id="phone-${u.id}" type="tel" placeholder="+54911XXXXXXXX" />
-              </div>
-              <div>
-                <label>WhatsApp</label>
-                <input id="whatsapp-${u.id}" type="tel" placeholder="+54911XXXXXXXX" />
-              </div>
+          <div id="editor-${escapeHtml(u.id)}" class="hidden">
+            <div id="contacts-${escapeHtml(u.id)}" data-contacts-list>
+              ${contacts.map(renderContactRow).join("")}
             </div>
 
-            <p class="small">Usá formato internacional. Para Argentina, por ejemplo: +54911XXXXXXXX.</p>
-            <button class="blue save-btn" type="button" data-id="${u.id}">Guardar datos</button>
+            <div class="grid2" style="margin-top:12px">
+              <button class="admin add-contact-btn" type="button" data-id="${escapeHtml(u.id)}">➕ Agregar contacto</button>
+              <button class="blue save-btn" type="button" data-id="${escapeHtml(u.id)}">Guardar datos</button>
+            </div>
+
+            <p class="small">Podés agregar tantos contactos como haga falta. Si dejás WhatsApp vacío, se usa el mismo número de teléfono.</p>
           </div>
         </div>
       ` : ""}
@@ -335,7 +447,11 @@ function renderUnit(u){
 function renderDirectory(){
   const q = norm($("search").value);
   const filtered = units.filter(function(u){
-    return norm(u.floor + " " + u.depto + " " + tenants(u)).includes(q);
+    const contactsText = normalizeContacts(u).map(function(c){
+      return [c.name, c.phone, c.whatsapp].join(" ");
+    }).join(" ");
+
+    return norm(u.floor + " " + u.depto + " " + contactSummary(u) + " " + contactsText).includes(q);
   });
 
   const grouped = groupByFloor(filtered);
@@ -356,7 +472,7 @@ function renderDirectory(){
     const section = document.createElement("section");
     section.innerHTML = `
       <div class="floor-title">
-        <span>Piso ${floor}</span>
+        <span>Piso ${escapeHtml(floor)}</span>
         <span>${grouped[floor].length}</span>
       </div>
       <div class="units">
@@ -375,6 +491,19 @@ function renderDirectory(){
   document.querySelectorAll(".save-btn").forEach(function(btn){
     btn.addEventListener("click", function(){
       saveUnit(btn.dataset.id);
+    });
+  });
+
+  document.querySelectorAll(".add-contact-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      addContactRow(btn.dataset.id);
+    });
+  });
+
+  document.querySelectorAll(".remove-contact-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      btn.closest("[data-contact-row]").remove();
+      refreshContactRowLabels(btn.closest("[data-contacts-list]"));
     });
   });
 }
@@ -412,16 +541,60 @@ function exitAdminMode(){
 }
 
 function openEditor(id){
-  const u = units.find(function(x){ return x.id === id; });
   const editor = $("editor-" + id);
-  if(!u || !editor) return;
-
+  if(!editor) return;
   editor.classList.toggle("hidden");
 
-  $("tenant1-" + id).value = u.tenant1 || "";
-  $("tenant2-" + id).value = u.tenant2 || "";
-  $("phone-" + id).value = u.phone || "";
-  $("whatsapp-" + id).value = u.whatsapp || "";
+  const list = $("contacts-" + id);
+  if(list && list.querySelectorAll("[data-contact-row]").length === 0){
+    addContactRow(id);
+  }
+}
+
+function refreshContactRowLabels(list){
+  if(!list) return;
+  list.querySelectorAll("[data-contact-row]").forEach(function(row, index){
+    const strong = row.querySelector("strong");
+    if(strong) strong.textContent = "Contacto " + (index + 1);
+  });
+}
+
+function addContactRow(id){
+  const list = $("contacts-" + id);
+  if(!list) return;
+
+  const temp = document.createElement("div");
+  const index = list.querySelectorAll("[data-contact-row]").length;
+  temp.innerHTML = renderContactRow({name:"", phone:"", whatsapp:""}, index).trim();
+  const row = temp.firstElementChild;
+
+  row.querySelector(".remove-contact-btn").addEventListener("click", function(){
+    row.remove();
+    refreshContactRowLabels(list);
+  });
+
+  list.appendChild(row);
+}
+
+function collectContacts(id){
+  const list = $("contacts-" + id);
+  if(!list) return [];
+
+  return Array.from(list.querySelectorAll("[data-contact-row]"))
+    .map(function(row){
+      const name = row.querySelector("[data-contact-name]").value.trim();
+      const phone = cleanPhone(row.querySelector("[data-contact-phone]").value.trim());
+      const whatsappInput = cleanPhone(row.querySelector("[data-contact-whatsapp]").value.trim());
+
+      return {
+        name: name,
+        phone: phone,
+        whatsapp: whatsappInput || phone
+      };
+    })
+    .filter(function(c){
+      return c.name || c.phone || c.whatsapp;
+    });
 }
 
 function saveUnit(id){
@@ -433,14 +606,9 @@ function saveUnit(id){
 
   const base = CONFIG.units.find(function(x){ return x.id === id; });
   const data = Object.assign({}, base, {
-    tenant1: $("tenant1-" + id).value.trim(),
-    tenant2: $("tenant2-" + id).value.trim(),
-    phone: cleanPhone($("phone-" + id).value.trim()),
-    whatsapp: cleanPhone($("whatsapp-" + id).value.trim()),
+    contacts: collectContacts(id),
     updatedAt: Date.now()
   });
-
-  if(!data.whatsapp) data.whatsapp = data.phone;
 
   db.ref(CONFIG.databasePath + "/" + id).set(data)
     .then(function(){
