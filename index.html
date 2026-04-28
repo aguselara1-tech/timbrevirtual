@@ -114,8 +114,6 @@ let isAdminMode = localStorage.getItem("building_admin_mode") === "true";
 
 const $ = id => document.getElementById(id);
 $("building-title").textContent = CONFIG.buildingName;
-$("search").addEventListener("input", renderDirectory);
-$("access-code").addEventListener("keydown", e => { if (e.key === "Enter") checkAccess(); });
 
 function cleanPhone(x){ return String(x||"").split("").filter(c=>"+0123456789".includes(c)).join(""); }
 function norm(x){ return String(x||"").toLowerCase().trim().replaceAll("á","a").replaceAll("é","e").replaceAll("í","i").replaceAll("ó","o").replaceAll("ú","u").replaceAll("ñ","n"); }
@@ -126,90 +124,15 @@ function waLink(phone,depto){ const n=cleanPhone(phone).replaceAll("+",""); retu
 function merge(dbUnits){
   const byId = dbUnits || {};
   units = CONFIG.units.map(u => ({...u, ...(byId[u.id] || {})}));
-  renderDirectory();
+  window.renderDirectory();
 }
 
-function initFirebase(){
-  $("firebase-warning").classList.remove("hidden");
-  try{
-    const app = initializeApp(firebaseConfig);
-    db = getDatabase(app);
-    dbReady = true;
-    onValue(ref(db, CONFIG.databasePath), snap => {
-      merge(snap.val());
-      $("firebase-warning").classList.add("hidden");
-    }, err => {
-      console.error(err);
-      $("firebase-warning").textContent = "No pude leer Firebase. Revisá las reglas de lectura.";
-      $("firebase-warning").classList.remove("hidden");
-      renderDirectory();
-    });
-  }catch(err){
-    console.error(err);
-    $("firebase-warning").textContent = "Error iniciando Firebase.";
-    $("firebase-warning").classList.remove("hidden");
-    renderDirectory();
-  }
-}
-
-window.showResidentLogin = function(){
-  if(isAdminMode){ $("admin-panel").classList.remove("hidden"); $("resident-login").classList.add("hidden"); }
-  else { $("resident-login").classList.toggle("hidden"); $("access-error").classList.add("hidden"); }
-}
-
-window.checkAccess = function(){
-  if($("access-code").value.trim() === CONFIG.residentAccessCode){
-    isAdminMode = true;
-    localStorage.setItem("building_admin_mode","true");
-    $("resident-login").classList.add("hidden");
-    $("admin-panel").classList.remove("hidden");
-    renderDirectory();
-  } else $("access-error").classList.remove("hidden");
-}
-
-window.exitAdminMode = function(){
-  isAdminMode = false;
-  localStorage.removeItem("building_admin_mode");
-  $("admin-panel").classList.add("hidden");
-  renderDirectory();
-}
-
-window.openEditor = function(id){
-  const u = units.find(x=>x.id===id);
-  const ed = $("editor-"+id);
-  if(!u || !ed) return;
-  ed.classList.toggle("hidden");
-  $("tenant1-"+id).value = u.tenant1 || "";
-  $("tenant2-"+id).value = u.tenant2 || "";
-  $("phone-"+id).value = u.phone || "";
-  $("whatsapp-"+id).value = u.whatsapp || "";
-}
-
-window.saveUnit = async function(id){
-  if(!dbReady){
-    $("save-error").textContent = "Firebase no está listo todavía.";
-    $("save-error").classList.remove("hidden");
-    return;
-  }
-  const base = CONFIG.units.find(x=>x.id===id);
-  const data = {
-    ...base,
-    tenant1: $("tenant1-"+id).value.trim(),
-    tenant2: $("tenant2-"+id).value.trim(),
-    phone: cleanPhone($("phone-"+id).value.trim()),
-    whatsapp: cleanPhone($("whatsapp-"+id).value.trim()),
-    updatedAt: Date.now()
-  };
-  if(!data.whatsapp) data.whatsapp = data.phone;
-  try{
-    await set(ref(db, CONFIG.databasePath+"/"+id), data);
-    $("save-error").classList.add("hidden");
-    $("save-message").classList.remove("hidden");
-    setTimeout(()=>$("save-message").classList.add("hidden"),2500);
-  }catch(err){
-    console.error(err);
-    $("save-error").classList.remove("hidden");
-  }
+function groupByFloor(list){
+  return list.reduce((acc,u)=>{ 
+    if(!acc[u.floor]) acc[u.floor] = [];
+    acc[u.floor].push(u);
+    return acc;
+  }, {});
 }
 
 function renderUnit(u){
@@ -246,19 +169,120 @@ function renderUnit(u){
 window.renderDirectory = function(){
   const q = norm($("search").value);
   const filtered = units.filter(u => norm(u.floor+" "+u.depto+" "+tenants(u)).includes(q));
-  const grouped = filtered.reduce((a,u)=>{ (a[u.floor] ||= []).push(u); return a; }, {});
+  const grouped = groupByFloor(filtered);
   $("floors").innerHTML = "";
-  if(isAdminMode) $("admin-panel").classList.remove("hidden"); else $("admin-panel").classList.add("hidden");
-  if(!filtered.length){ $("floors").innerHTML = '<div class="card">No encontré ese departamento.</div>'; return; }
+
+  if(isAdminMode) $("admin-panel").classList.remove("hidden");
+  else $("admin-panel").classList.add("hidden");
+
+  if(!filtered.length){
+    $("floors").innerHTML = '<div class="card">No encontré ese departamento.</div>';
+    return;
+  }
+
   Object.keys(grouped).forEach(floor=>{
     const section=document.createElement("section");
     section.innerHTML = `<div class="floor-title"><span>Piso ${floor}</span><span>${grouped[floor].length}</span></div><div class="units">${grouped[floor].map(renderUnit).join("")}</div>`;
     $("floors").appendChild(section);
   });
+};
+
+window.showResidentLogin = function(){
+  if(isAdminMode){
+    $("admin-panel").classList.remove("hidden");
+    $("resident-login").classList.add("hidden");
+  } else {
+    $("resident-login").classList.toggle("hidden");
+    $("access-error").classList.add("hidden");
+  }
+};
+
+window.checkAccess = function(){
+  if($("access-code").value.trim() === CONFIG.residentAccessCode){
+    isAdminMode = true;
+    localStorage.setItem("building_admin_mode","true");
+    $("resident-login").classList.add("hidden");
+    $("admin-panel").classList.remove("hidden");
+    window.renderDirectory();
+  } else {
+    $("access-error").classList.remove("hidden");
+  }
+};
+
+window.exitAdminMode = function(){
+  isAdminMode = false;
+  localStorage.removeItem("building_admin_mode");
+  $("admin-panel").classList.add("hidden");
+  window.renderDirectory();
+};
+
+window.openEditor = function(id){
+  const u = units.find(x=>x.id===id);
+  const ed = $("editor-"+id);
+  if(!u || !ed) return;
+  ed.classList.toggle("hidden");
+  $("tenant1-"+id).value = u.tenant1 || "";
+  $("tenant2-"+id).value = u.tenant2 || "";
+  $("phone-"+id).value = u.phone || "";
+  $("whatsapp-"+id).value = u.whatsapp || "";
+};
+
+window.saveUnit = async function(id){
+  if(!dbReady){
+    $("save-error").textContent = "Firebase no está listo todavía.";
+    $("save-error").classList.remove("hidden");
+    return;
+  }
+  const base = CONFIG.units.find(x=>x.id===id);
+  const data = {
+    ...base,
+    tenant1: $("tenant1-"+id).value.trim(),
+    tenant2: $("tenant2-"+id).value.trim(),
+    phone: cleanPhone($("phone-"+id).value.trim()),
+    whatsapp: cleanPhone($("whatsapp-"+id).value.trim()),
+    updatedAt: Date.now()
+  };
+  if(!data.whatsapp) data.whatsapp = data.phone;
+  try{
+    await set(ref(db, CONFIG.databasePath+"/"+id), data);
+    $("save-error").classList.add("hidden");
+    $("save-message").classList.remove("hidden");
+    setTimeout(()=>$("save-message").classList.add("hidden"),2500);
+  }catch(err){
+    console.error(err);
+    $("save-error").textContent = "No pude guardar. Revisá Firebase y sus reglas.";
+    $("save-error").classList.remove("hidden");
+  }
+};
+
+function initFirebase(){
+  $("firebase-warning").classList.remove("hidden");
+  try{
+    const app = initializeApp(firebaseConfig);
+    db = getDatabase(app);
+    dbReady = true;
+    onValue(ref(db, CONFIG.databasePath), snap => {
+      merge(snap.val());
+      $("firebase-warning").classList.add("hidden");
+    }, err => {
+      console.error(err);
+      $("firebase-warning").textContent = "No pude leer Firebase. Revisá las reglas de lectura.";
+      $("firebase-warning").classList.remove("hidden");
+      window.renderDirectory();
+    });
+  }catch(err){
+    console.error(err);
+    $("firebase-warning").textContent = "Error iniciando Firebase.";
+    $("firebase-warning").classList.remove("hidden");
+    window.renderDirectory();
+  }
 }
 
+$("search").addEventListener("input", () => window.renderDirectory());
+$("access-code").addEventListener("keydown", e => { if (e.key === "Enter") window.checkAccess(); });
+
 if(isAdminMode) $("admin-panel").classList.remove("hidden");
-renderDirectory();
+window.renderDirectory();
 initFirebase();
 </script>
 </body>
