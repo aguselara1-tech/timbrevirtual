@@ -4,29 +4,143 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Timbre Digital</title>
+
 <style>
-:root{--bg:#0f172a;--text:#f8fafc;--muted:#94a3b8;--blue:#38bdf8;--green:#22c55e;--yellow:#fbbf24;--red:#ef4444;--border:rgba(255,255,255,.12)}
+:root{
+  --bg:#0f172a;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+  --blue:#38bdf8;
+  --green:#22c55e;
+  --yellow:#fbbf24;
+  --red:#ef4444;
+  --border:rgba(255,255,255,.12);
+}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;padding:20px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(circle at top left,rgba(56,189,248,.18),transparent 35%),radial-gradient(circle at bottom right,rgba(34,197,94,.13),transparent 35%),var(--bg);color:var(--text)}
+body{
+  margin:0;
+  min-height:100vh;
+  padding:20px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top left,rgba(56,189,248,.18),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(34,197,94,.13),transparent 35%),
+    var(--bg);
+  color:var(--text);
+}
 .app{max-width:850px;margin:auto}
 .hero{text-align:center;padding:24px 8px}
-h1{font-size:clamp(34px,8vw,56px);line-height:.95;margin:0;letter-spacing:-.05em}
-.subtitle{color:var(--muted);line-height:1.45;max-width:680px;margin:14px auto}
-.card,.unit{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid var(--border);border-radius:22px;padding:16px;box-shadow:0 18px 45px rgba(0,0,0,.25);margin:12px 0}
+h1{
+  font-size:clamp(34px,8vw,56px);
+  line-height:.95;
+  margin:0;
+  letter-spacing:-.05em;
+}
+.subtitle{
+  color:var(--muted);
+  line-height:1.45;
+  max-width:680px;
+  margin:14px auto;
+}
+.card,.unit{
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:16px;
+  box-shadow:0 18px 45px rgba(0,0,0,.25);
+  margin:12px 0;
+}
 .hidden{display:none!important}
-label{display:block;color:#cbd5e1;font-weight:800;margin:10px 0 6px}
-input{width:100%;border:1px solid var(--border);background:rgba(15,23,42,.85);color:var(--text);border-radius:14px;padding:13px;font-size:16px}
-button,.btn{border:0;border-radius:14px;padding:13px 15px;font-size:15px;font-weight:900;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:inherit}
+label{
+  display:block;
+  color:#cbd5e1;
+  font-weight:800;
+  margin:10px 0 6px;
+}
+input{
+  width:100%;
+  border:1px solid var(--border);
+  background:rgba(15,23,42,.85);
+  color:var(--text);
+  border-radius:14px;
+  padding:13px;
+  font-size:16px;
+}
+button,.btn{
+  border:0;
+  border-radius:14px;
+  padding:13px 15px;
+  font-size:15px;
+  font-weight:900;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  cursor:pointer;
+  color:inherit;
+}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.blue{background:var(--blue);color:#082f49}.green{background:var(--green);color:#052e16}.wa{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);color:#bbf7d0}.admin{background:rgba(251,191,36,.14);border:1px solid rgba(251,191,36,.28);color:#fde68a}.gray{background:rgba(148,163,184,.14);border:1px solid rgba(148,163,184,.22);color:#e2e8f0}.disabled{background:rgba(148,163,184,.1);color:rgba(226,232,240,.45);pointer-events:none}
-.msg{border-radius:14px;padding:10px 12px;margin-top:10px;font-size:14px}.warn{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:#fde68a}.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fecaca}.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#bbf7d0}
-.floor-title{display:flex;justify-content:space-between;margin:20px 4px 10px;color:#e2e8f0;font-weight:950;text-transform:uppercase;letter-spacing:.08em}
-.units{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:12px}
-.unit{margin:0}.unit-name{font-size:24px;font-weight:950}.resident,.small{color:var(--muted);font-size:14px}.pill{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:5px 9px;color:#cbd5e1}
-.top{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px}.edit{margin-top:10px}.footer{text-align:center;color:rgba(226,232,240,.45);font-size:12px;margin:18px}
-@media(max-width:620px){body{padding:14px}.grid2{grid-template-columns:1fr}.top{flex-direction:column}}
+.blue{background:var(--blue);color:#082f49}
+.green{background:var(--green);color:#052e16}
+.wa{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);color:#bbf7d0}
+.admin{background:rgba(251,191,36,.14);border:1px solid rgba(251,191,36,.28);color:#fde68a}
+.gray{background:rgba(148,163,184,.14);border:1px solid rgba(148,163,184,.22);color:#e2e8f0}
+.disabled{background:rgba(148,163,184,.1);color:rgba(226,232,240,.45);pointer-events:none}
+.msg{
+  border-radius:14px;
+  padding:10px 12px;
+  margin-top:10px;
+  font-size:14px;
+}
+.warn{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:#fde68a}
+.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fecaca}
+.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#bbf7d0}
+.floor-title{
+  display:flex;
+  justify-content:space-between;
+  margin:20px 4px 10px;
+  color:#e2e8f0;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.units{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(245px,1fr));
+  gap:12px;
+}
+.unit{margin:0}
+.unit-name{font-size:24px;font-weight:950}
+.resident,.small{color:var(--muted);font-size:14px}
+.pill{
+  font-size:12px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:5px 9px;
+  color:#cbd5e1;
+}
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+.edit{margin-top:10px}
+.footer{
+  text-align:center;
+  color:rgba(226,232,240,.45);
+  font-size:12px;
+  margin:18px;
+}
+@media(max-width:620px){
+  body{padding:14px}
+  .grid2{grid-template-columns:1fr}
+  .top{flex-direction:column}
+}
 </style>
 </head>
+
 <body>
 <main class="app">
   <section class="hero">
@@ -38,8 +152,8 @@ button,.btn{border:0;border-radius:14px;padding:13px 15px;font-size:15px;font-we
   <div id="firebase-warning" class="card msg warn hidden">Conectando con la base online...</div>
 
   <div class="grid2">
-    <button class="admin" onclick="showResidentLogin()">🔐 Soy del edificio / cargar mis datos</button>
-    <button class="gray" onclick="renderDirectory()">🔎 Ver lista de llamados</button>
+    <button id="btn-resident" class="admin" type="button">🔐 Soy del edificio / cargar mis datos</button>
+    <button id="btn-list" class="gray" type="button">🔎 Ver lista de llamados</button>
   </div>
 
   <section id="resident-login" class="card hidden">
@@ -47,7 +161,7 @@ button,.btn{border:0;border-radius:14px;padding:13px 15px;font-size:15px;font-we
     <p class="small">Ingresá la clave del edificio para editar datos.</p>
     <div class="grid2">
       <input id="access-code" type="password" placeholder="Código del edificio" />
-      <button class="blue" onclick="checkAccess()">Entrar</button>
+      <button id="btn-access" class="blue" type="button">Entrar</button>
     </div>
     <div id="access-error" class="msg err hidden">Código incorrecto.</div>
   </section>
@@ -60,7 +174,7 @@ button,.btn{border:0;border-radius:14px;padding:13px 15px;font-size:15px;font-we
       </div>
       <span class="pill">Residente</span>
     </div>
-    <button class="gray" onclick="exitAdminMode()">Salir del modo edición</button>
+    <button id="btn-exit" class="gray" type="button">Salir del modo edición</button>
     <div id="save-message" class="msg ok hidden">Datos guardados en la base online.</div>
     <div id="save-error" class="msg err hidden">No pude guardar. Revisá Firebase y sus reglas.</div>
   </section>
@@ -71,13 +185,14 @@ button,.btn{border:0;border-radius:14px;padding:13px 15px;font-size:15px;font-we
   </section>
 
   <div id="floors"></div>
+
   <div class="footer">QR → web → Firebase → llamada/WhatsApp</div>
 </main>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyCZNOhbkNcfkqxrfC-G58M4KkDW7uGErUg",
   authDomain: "timbrevirtual4480.firebaseapp.com",
@@ -112,177 +227,271 @@ let dbReady = false;
 let units = JSON.parse(JSON.stringify(CONFIG.units));
 let isAdminMode = localStorage.getItem("building_admin_mode") === "true";
 
-const $ = id => document.getElementById(id);
+function $(id){ return document.getElementById(id); }
+
 $("building-title").textContent = CONFIG.buildingName;
 
-function cleanPhone(x){ return String(x||"").split("").filter(c=>"+0123456789".includes(c)).join(""); }
-function norm(x){ return String(x||"").toLowerCase().trim().replaceAll("á","a").replaceAll("é","e").replaceAll("í","i").replaceAll("ó","o").replaceAll("ú","u").replaceAll("ñ","n"); }
-function tenants(u){ const a=[u.tenant1,u.tenant2].map(x=>String(x||"").trim()).filter(Boolean); return a.length?a.join(" / "):"Departamento"; }
-function maskPhone(p){ p=cleanPhone(p); return p ? p.slice(0,4)+"••••"+p.slice(-4) : "Sin teléfono cargado"; }
-function waLink(phone,depto){ const n=cleanPhone(phone).replaceAll("+",""); return "https://wa.me/"+n+"?text="+encodeURIComponent("Hola, estoy en la entrada del edificio. Estoy llamando al depto "+depto+"."); }
+function cleanPhone(x){
+  return String(x || "").split("").filter(function(c){
+    return "+0123456789".includes(c);
+  }).join("");
+}
 
-function merge(dbUnits){
-  const byId = dbUnits || {};
-  units = CONFIG.units.map(u => ({...u, ...(byId[u.id] || {})}));
-  window.renderDirectory();
+function norm(x){
+  return String(x || "")
+    .toLowerCase()
+    .trim()
+    .replaceAll("á","a")
+    .replaceAll("é","e")
+    .replaceAll("í","i")
+    .replaceAll("ó","o")
+    .replaceAll("ú","u")
+    .replaceAll("ñ","n");
+}
+
+function tenants(u){
+  const arr = [u.tenant1, u.tenant2]
+    .map(function(x){ return String(x || "").trim(); })
+    .filter(Boolean);
+  return arr.length ? arr.join(" / ") : "Departamento";
+}
+
+function maskPhone(p){
+  p = cleanPhone(p);
+  return p ? p.slice(0,4) + "••••" + p.slice(-4) : "Sin teléfono cargado";
+}
+
+function waLink(phone, depto){
+  const n = cleanPhone(phone).replaceAll("+","");
+  return "https://wa.me/" + n + "?text=" + encodeURIComponent("Hola, estoy en la entrada del edificio. Estoy llamando al depto " + depto + ".");
 }
 
 function groupByFloor(list){
-  return list.reduce((acc,u)=>{ 
+  return list.reduce(function(acc,u){
     if(!acc[u.floor]) acc[u.floor] = [];
     acc[u.floor].push(u);
     return acc;
   }, {});
 }
 
-function renderUnit(u){
-  const phone=cleanPhone(u.phone), wa=cleanPhone(u.whatsapp || u.phone);
-  return `<article class="unit">
-    <div class="top">
-      <div>
-        <div class="unit-name">${u.depto}</div>
-        <div class="resident">${tenants(u)}</div>
-        <div class="small">${isAdminMode ? maskPhone(phone) : (phone ? "Contacto disponible" : "Aún sin datos cargados")}</div>
-      </div>
-      <span class="pill">Piso ${u.floor}</span>
-    </div>
-    <div class="grid2">
-      ${phone ? `<a class="btn green" href="tel:${phone}">📞 Llamar</a>` : `<span class="btn disabled">📞 Sin teléfono</span>`}
-      ${wa ? `<a class="btn wa" href="${waLink(wa,u.depto)}" target="_blank" rel="noopener">💬 WhatsApp</a>` : `<span class="btn disabled">💬 Sin WhatsApp</span>`}
-    </div>
-    ${isAdminMode ? `<div class="edit">
-      <button class="admin" onclick="openEditor('${u.id}')">✏️ Editar datos de ${u.depto}</button>
-      <div id="editor-${u.id}" class="hidden">
-        <label>Inquilino/a 1 opcional</label><input id="tenant1-${u.id}" placeholder="Ejemplo: Ana Gómez" />
-        <label>Inquilino/a 2 opcional</label><input id="tenant2-${u.id}" placeholder="Ejemplo: Juan Pérez" />
-        <div class="grid2">
-          <div><label>Teléfono</label><input id="phone-${u.id}" type="tel" placeholder="+54911XXXXXXXX" /></div>
-          <div><label>WhatsApp</label><input id="whatsapp-${u.id}" type="tel" placeholder="+54911XXXXXXXX" /></div>
-        </div>
-        <p class="small">Usá formato internacional. Para Argentina, por ejemplo: +54911XXXXXXXX.</p>
-        <button class="blue" onclick="saveUnit('${u.id}')">Guardar datos</button>
-      </div>
-    </div>` : ""}
-  </article>`;
+function merge(dbUnits){
+  const byId = dbUnits || {};
+  units = CONFIG.units.map(function(u){
+    return Object.assign({}, u, byId[u.id] || {});
+  });
+  renderDirectory();
 }
 
-window.renderDirectory = function(){
+function renderUnit(u){
+  const phone = cleanPhone(u.phone);
+  const wa = cleanPhone(u.whatsapp || u.phone);
+
+  return `
+    <article class="unit">
+      <div class="top">
+        <div>
+          <div class="unit-name">${u.depto}</div>
+          <div class="resident">${tenants(u)}</div>
+          <div class="small">${isAdminMode ? maskPhone(phone) : (phone ? "Contacto disponible" : "Aún sin datos cargados")}</div>
+        </div>
+        <span class="pill">Piso ${u.floor}</span>
+      </div>
+
+      <div class="grid2">
+        ${phone ? `<a class="btn green" href="tel:${phone}">📞 Llamar</a>` : `<span class="btn disabled">📞 Sin teléfono</span>`}
+        ${wa ? `<a class="btn wa" href="${waLink(wa,u.depto)}" target="_blank" rel="noopener">💬 WhatsApp</a>` : `<span class="btn disabled">💬 Sin WhatsApp</span>`}
+      </div>
+
+      ${isAdminMode ? `
+        <div class="edit">
+          <button class="admin edit-btn" type="button" data-id="${u.id}">✏️ Editar datos de ${u.depto}</button>
+          <div id="editor-${u.id}" class="hidden">
+            <label>Inquilino/a 1 opcional</label>
+            <input id="tenant1-${u.id}" placeholder="Ejemplo: Ana Gómez" />
+
+            <label>Inquilino/a 2 opcional</label>
+            <input id="tenant2-${u.id}" placeholder="Ejemplo: Juan Pérez" />
+
+            <div class="grid2">
+              <div>
+                <label>Teléfono</label>
+                <input id="phone-${u.id}" type="tel" placeholder="+54911XXXXXXXX" />
+              </div>
+              <div>
+                <label>WhatsApp</label>
+                <input id="whatsapp-${u.id}" type="tel" placeholder="+54911XXXXXXXX" />
+              </div>
+            </div>
+
+            <p class="small">Usá formato internacional. Para Argentina, por ejemplo: +54911XXXXXXXX.</p>
+            <button class="blue save-btn" type="button" data-id="${u.id}">Guardar datos</button>
+          </div>
+        </div>
+      ` : ""}
+    </article>
+  `;
+}
+
+function renderDirectory(){
   const q = norm($("search").value);
-  const filtered = units.filter(u => norm(u.floor+" "+u.depto+" "+tenants(u)).includes(q));
+  const filtered = units.filter(function(u){
+    return norm(u.floor + " " + u.depto + " " + tenants(u)).includes(q);
+  });
+
   const grouped = groupByFloor(filtered);
   $("floors").innerHTML = "";
 
-  if(isAdminMode) $("admin-panel").classList.remove("hidden");
-  else $("admin-panel").classList.add("hidden");
+  if(isAdminMode){
+    $("admin-panel").classList.remove("hidden");
+  } else {
+    $("admin-panel").classList.add("hidden");
+  }
 
   if(!filtered.length){
     $("floors").innerHTML = '<div class="card">No encontré ese departamento.</div>';
     return;
   }
 
-  Object.keys(grouped).forEach(floor=>{
-    const section=document.createElement("section");
-    section.innerHTML = `<div class="floor-title"><span>Piso ${floor}</span><span>${grouped[floor].length}</span></div><div class="units">${grouped[floor].map(renderUnit).join("")}</div>`;
+  Object.keys(grouped).forEach(function(floor){
+    const section = document.createElement("section");
+    section.innerHTML = `
+      <div class="floor-title">
+        <span>Piso ${floor}</span>
+        <span>${grouped[floor].length}</span>
+      </div>
+      <div class="units">
+        ${grouped[floor].map(renderUnit).join("")}
+      </div>
+    `;
     $("floors").appendChild(section);
   });
-};
 
-window.showResidentLogin = function(){
+  document.querySelectorAll(".edit-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      openEditor(btn.dataset.id);
+    });
+  });
+
+  document.querySelectorAll(".save-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      saveUnit(btn.dataset.id);
+    });
+  });
+}
+
+function showResidentLogin(){
   if(isAdminMode){
     $("admin-panel").classList.remove("hidden");
     $("resident-login").classList.add("hidden");
   } else {
     $("resident-login").classList.toggle("hidden");
     $("access-error").classList.add("hidden");
+    setTimeout(function(){ $("access-code").focus(); }, 50);
   }
-};
+}
 
-window.checkAccess = function(){
-  if($("access-code").value.trim() === CONFIG.residentAccessCode){
+function checkAccess(){
+  const typed = $("access-code").value.trim().toUpperCase();
+  if(typed === CONFIG.residentAccessCode.toUpperCase()){
     isAdminMode = true;
     localStorage.setItem("building_admin_mode","true");
     $("resident-login").classList.add("hidden");
     $("admin-panel").classList.remove("hidden");
-    window.renderDirectory();
+    $("access-error").classList.add("hidden");
+    renderDirectory();
   } else {
     $("access-error").classList.remove("hidden");
   }
-};
+}
 
-window.exitAdminMode = function(){
+function exitAdminMode(){
   isAdminMode = false;
   localStorage.removeItem("building_admin_mode");
   $("admin-panel").classList.add("hidden");
-  window.renderDirectory();
-};
+  renderDirectory();
+}
 
-window.openEditor = function(id){
-  const u = units.find(x=>x.id===id);
-  const ed = $("editor-"+id);
-  if(!u || !ed) return;
-  ed.classList.toggle("hidden");
-  $("tenant1-"+id).value = u.tenant1 || "";
-  $("tenant2-"+id).value = u.tenant2 || "";
-  $("phone-"+id).value = u.phone || "";
-  $("whatsapp-"+id).value = u.whatsapp || "";
-};
+function openEditor(id){
+  const u = units.find(function(x){ return x.id === id; });
+  const editor = $("editor-" + id);
+  if(!u || !editor) return;
 
-window.saveUnit = async function(id){
+  editor.classList.toggle("hidden");
+
+  $("tenant1-" + id).value = u.tenant1 || "";
+  $("tenant2-" + id).value = u.tenant2 || "";
+  $("phone-" + id).value = u.phone || "";
+  $("whatsapp-" + id).value = u.whatsapp || "";
+}
+
+function saveUnit(id){
   if(!dbReady){
     $("save-error").textContent = "Firebase no está listo todavía.";
     $("save-error").classList.remove("hidden");
     return;
   }
-  const base = CONFIG.units.find(x=>x.id===id);
-  const data = {
-    ...base,
-    tenant1: $("tenant1-"+id).value.trim(),
-    tenant2: $("tenant2-"+id).value.trim(),
-    phone: cleanPhone($("phone-"+id).value.trim()),
-    whatsapp: cleanPhone($("whatsapp-"+id).value.trim()),
+
+  const base = CONFIG.units.find(function(x){ return x.id === id; });
+  const data = Object.assign({}, base, {
+    tenant1: $("tenant1-" + id).value.trim(),
+    tenant2: $("tenant2-" + id).value.trim(),
+    phone: cleanPhone($("phone-" + id).value.trim()),
+    whatsapp: cleanPhone($("whatsapp-" + id).value.trim()),
     updatedAt: Date.now()
-  };
+  });
+
   if(!data.whatsapp) data.whatsapp = data.phone;
-  try{
-    await set(ref(db, CONFIG.databasePath+"/"+id), data);
-    $("save-error").classList.add("hidden");
-    $("save-message").classList.remove("hidden");
-    setTimeout(()=>$("save-message").classList.add("hidden"),2500);
-  }catch(err){
-    console.error(err);
-    $("save-error").textContent = "No pude guardar. Revisá Firebase y sus reglas.";
-    $("save-error").classList.remove("hidden");
-  }
-};
+
+  db.ref(CONFIG.databasePath + "/" + id).set(data)
+    .then(function(){
+      $("save-error").classList.add("hidden");
+      $("save-message").classList.remove("hidden");
+      setTimeout(function(){
+        $("save-message").classList.add("hidden");
+      }, 2500);
+    })
+    .catch(function(error){
+      console.error(error);
+      $("save-error").textContent = "No pude guardar. Revisá Firebase y sus reglas.";
+      $("save-error").classList.remove("hidden");
+    });
+}
 
 function initFirebase(){
   $("firebase-warning").classList.remove("hidden");
+
   try{
-    const app = initializeApp(firebaseConfig);
-    db = getDatabase(app);
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
     dbReady = true;
-    onValue(ref(db, CONFIG.databasePath), snap => {
-      merge(snap.val());
+
+    db.ref(CONFIG.databasePath).on("value", function(snapshot){
+      merge(snapshot.val());
       $("firebase-warning").classList.add("hidden");
-    }, err => {
-      console.error(err);
+    }, function(error){
+      console.error(error);
       $("firebase-warning").textContent = "No pude leer Firebase. Revisá las reglas de lectura.";
       $("firebase-warning").classList.remove("hidden");
-      window.renderDirectory();
+      renderDirectory();
     });
-  }catch(err){
-    console.error(err);
+  } catch(error){
+    console.error(error);
     $("firebase-warning").textContent = "Error iniciando Firebase.";
     $("firebase-warning").classList.remove("hidden");
-    window.renderDirectory();
+    renderDirectory();
   }
 }
 
-$("search").addEventListener("input", () => window.renderDirectory());
-$("access-code").addEventListener("keydown", e => { if (e.key === "Enter") window.checkAccess(); });
+$("btn-resident").addEventListener("click", showResidentLogin);
+$("btn-list").addEventListener("click", renderDirectory);
+$("btn-access").addEventListener("click", checkAccess);
+$("btn-exit").addEventListener("click", exitAdminMode);
+$("search").addEventListener("input", renderDirectory);
+$("access-code").addEventListener("keydown", function(e){
+  if(e.key === "Enter") checkAccess();
+});
 
-if(isAdminMode) $("admin-panel").classList.remove("hidden");
-window.renderDirectory();
+renderDirectory();
 initFirebase();
 </script>
 </body>
